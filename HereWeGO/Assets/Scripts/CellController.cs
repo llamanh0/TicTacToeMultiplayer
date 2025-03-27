@@ -1,22 +1,23 @@
-using UnityEditor.Build.Content;
 using UnityEngine;
 
 public class CellController : MonoBehaviour
 {
-    public int row;
-    public int col;
-    private GameManager gameManager;
+    public int cellIndex; // 0-8 arasý
+    private SpriteRenderer spriteRenderer;
 
-    private void Start()
+    void Start()
     {
-        gameManager = FindObjectOfType<GameManager>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    private void OnMouseDown()
+    void OnMouseDown()
     {
-        if(gameManager != null && gameManager.IsMyTurn())
-        {
-            gameManager.PlayerMove(row, col);
-        }
+        GameManager.Instance.PlayerClick(cellIndex);
+    }
+
+    public void SetSymbol(Sprite sprite, Color color)
+    {
+        spriteRenderer.sprite = sprite;
+        spriteRenderer.color = color;
     }
 }

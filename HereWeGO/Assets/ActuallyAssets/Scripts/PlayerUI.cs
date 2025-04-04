@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class PlayerUI : MonoBehaviour
@@ -6,6 +7,8 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private GameObject circleArrowGameObject;
     [SerializeField] private GameObject crossYouTextGameObject;
     [SerializeField] private GameObject circleYouTextGameObject;
+    [SerializeField] private TextMeshProUGUI playerCrossScoreTextMesh;
+    [SerializeField] private TextMeshProUGUI playerCircleScoreTextMesh;
 
     private void Awake()
     {
@@ -13,12 +16,24 @@ public class PlayerUI : MonoBehaviour
         circleArrowGameObject.SetActive(false);
         circleYouTextGameObject.SetActive(false);
         crossYouTextGameObject.SetActive(false);
+
+        playerCrossScoreTextMesh.text = "0";
+        playerCircleScoreTextMesh.text = "0";
     }
 
     private void Start()
     {
         GameManager.Instance.OnGameStarted += GameManager_OnGameStarted;
         GameManager.Instance.OnCurrentPlayablePlayerTypeChange += GameManager_OnCurrentPlayablePlayerTypeChange;
+        GameManager.Instance.OnScoreChanged += GameManager_OnScoreChanged;
+    }
+
+    private void GameManager_OnScoreChanged(object sender, System.EventArgs e)
+    {
+        GameManager.Instance.GetScores(out int playerCrossScore, out int playerCircleScore);
+
+        playerCrossScoreTextMesh.text = playerCrossScore.ToString();
+        playerCircleScoreTextMesh.text = playerCircleScore.ToString();
     }
 
     private void GameManager_OnCurrentPlayablePlayerTypeChange(object sender, System.EventArgs e)
